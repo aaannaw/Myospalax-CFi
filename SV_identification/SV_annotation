@@ -6,5 +6,12 @@ python3 filter.Mpfix.sv.py
 perl -alne 'if ($F[2] eq "gene") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[4] - 1; $end = $F[4] + 2000; print "$F[0]\t$start\t$end\t$name";}' Ma.genome.gff| sort -k1,1 -k2,2n -k3,3n |bgzip -c > Ma.genes.downstream.bed.gz
 perl -alne 'if ($F[2] eq "gene") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[3] - 5001; $end = $F[3]; print "$F[0]\t$start\t$end\t$name";}' Ma.genome.gff | sort -k1,1 -k2,2n -k3,3n | bgzip -c > Ma.genes.upstream.bed.gz
 perl -alne 'if ($F[2] eq "gene") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[3] - 1; $end = $F[4] - 1; print "$F[0]\t$start\t$end\t$name";}' Ma.genome.gff | sort -k1,1 -k2,2n -k3,3n | bgzip -c > Ma.genes.srt.bed.gz
-perl -alne 'if ($F[2] eq "mRNA") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[3] - 1; $end = $F[3]; print "$F[0]\t$start\t$end\t$name";}' Ma.Contig.gff | sort -k1,1 -k2,2n -k3,3n | bgzip -c > Ma.cds_start.srt.bed.gz
-perl -alne 'if ($F[2] eq "gene") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[3] - 1; $end = $F[4] - 1; print "$F[0]\t$start\t$end\t$name";}' Ma.Contig.gff | sort -k1,1 -k2,2n -k3,3n | bgzip -c > Ma.genes.srt.bed.gz
+perl -alne 'if ($F[2] eq "mRNA") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[3] - 1; $end = $F[3]; print "$F[0]\t$start\t$end\t$name";}' Ma.genome.gff | sort -k1,1 -k2,2n -k3,3n | bgzip -c > Ma.cds_start.srt.bed.gz
+perl -alne 'if ($F[2] eq "mRNA") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[4] - 1; $end = $F[4]; print "$F[0]\t$start\t$end\t$name";}' Ma.genome.gff | sort -k1,1 -k2,2n -k3,3n | bgzip-c > Ma.cds_end.srt.bed.gz
+perl -alne 'if ($F[2] eq "exon") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[3] - 1; $end = $F[4] - 1; print "$F[0]\t$start\t$end\t$name";}' Ma.genome.gff | sort -k1,1 -k2,2n -k3,3n | bgzip -c > Ma.exons.srt.bed.gz
+tabix Ma6.final.chr.fa
+vcfanno config.toml LR_SV.vcf/SR_SV.vcf > LR_annotated.vcf/SR_annotated.vcf
+#screening of candidate SVs
+python3 01.get.evm.py  LR_annotated.vcf/SR_annotated.vcf > allsv-geneid.txt
+python3 find.specific.sv.py > Mp.fixSV.geneid.txt
+python3 03.get_gene_name.py > Mp.fixSV.genename.txt
