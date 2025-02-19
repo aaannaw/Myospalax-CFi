@@ -27,11 +27,11 @@ perl /data/01/user191/YJW/utils/ConvertTrf2Gff.pl  Ma6.final.chr.fa.2.7.7.80.10.
 ln -s ../LTRretriever/Denovo.gff ./Denovo.gff
 ln -s ../02.repeatmakser/TE.gff ./TE.gff
 ln -s ../03.repeatproteinmask/TP.gff ./TP.gff
-ln -s ../04.trf/Fukomys_anseli.chr.fasta.trf.gff ./TRF.gff
+ln -s ../04.trf/Ma6.final.chr.fa.trf.gff ./TRF.gff
 cat Denovo.gff TE.gff TP.gff TRF.gff | grep -v -P '^#' | cut -f 1,4,5 | sort -k1,1 -k2,2n -k3,3n > All.repeat.bed
 bedtools merge -i All.repeat.bed > All.repeat.merge.bed
-bedtools maskfasta -fi Fukomys_anseli.chr.fasta -bed All.repeat.merge.bed -fo Fukomys_anseli.chr.fasta.mask
-bedtools maskfasta -fi Fukomys_anseli.chr.fasta -bed All.repeat.merge.bed -fo Fukomys_anseli.chr.fasta.mask_soft -soft
+bedtools maskfasta -fi Ma6.final.chr.fa -bed All.repeat.merge.bed -fo Ma6.final.chr.fa.mask
+bedtools maskfasta -fi Ma6.final.chr.fa -bed All.repeat.merge.bed -fo Ma6.final.chr.fa.mask_soft -soft
 grep -v 'Class=Unknown;' Denovo.gff > Denovo.gff.known
 grep -v 'Class=Unknown;' TE.gff > TE.gff.known
 grep -v 'Class=Unknown;' TP.gff > TP.gff.known
