@@ -1,0 +1,10 @@
+#calcultating frequency for every SV 
+python3 SV.species.count.py LR_SV.vcf/SR_SV.vcf
+#filtering SV specific and fixed in M. psilurus
+python3 filter.Mpfix.sv.py
+#annotating SV
+perl -alne 'if ($F[2] eq "gene") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[4] - 1; $end = $F[4] + 2000; print "$F[0]\t$start\t$end\t$name";}' Ma.genome.gff| sort -k1,1 -k2,2n -k3,3n |bgzip -c > Ma.genes.downstream.bed.gz
+perl -alne 'if ($F[2] eq "gene") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[3] - 5001; $end = $F[3]; print "$F[0]\t$start\t$end\t$name";}' Ma.genome.gff | sort -k1,1 -k2,2n -k3,3n | bgzip -c > Ma.genes.upstream.bed.gz
+perl -alne 'if ($F[2] eq "gene") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[3] - 1; $end = $F[4] - 1; print "$F[0]\t$start\t$end\t$name";}' Ma.genome.gff | sort -k1,1 -k2,2n -k3,3n | bgzip -c > Ma.genes.srt.bed.gz
+perl -alne 'if ($F[2] eq "mRNA") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[3] - 1; $end = $F[3]; print "$F[0]\t$start\t$end\t$name";}' Ma.Contig.gff | sort -k1,1 -k2,2n -k3,3n | bgzip -c > Ma.cds_start.srt.bed.gz
+perl -alne 'if ($F[2] eq "gene") {$F[8] =~ /ID=(.*?);/; $name = $1; $start = $F[3] - 1; $end = $F[4] - 1; print "$F[0]\t$start\t$end\t$name";}' Ma.Contig.gff | sort -k1,1 -k2,2n -k3,3n | bgzip -c > Ma.genes.srt.bed.gz
