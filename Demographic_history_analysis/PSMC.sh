@@ -1,0 +1,1 @@
+samtools mpileup -C50 -u -f Fsr_decontaminated_genome.fasta AS.sort.rmdup.bam  | /data/01/user194/project/psmc/bcftools-1.10/htslib-1.10/bin/bcftools call -c | vcfutils.pl vcf2fq -d 4 -D 24 | gzip > AS.fq.gz
